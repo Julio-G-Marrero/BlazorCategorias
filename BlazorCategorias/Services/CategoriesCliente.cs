@@ -14,7 +14,7 @@ namespace BlazorCategorias.Services
         }
         private static readonly JsonSerializerOptions _jsonOptions = new()
         {
-            //PropertyNameCaseInsensitive = true
+            PropertyNameCaseInsensitive = true
         };
         public async Task<Categorie?> CreateCategorie(Categorie categorie)
         {
@@ -69,7 +69,7 @@ namespace BlazorCategorias.Services
 
         public async Task<IEnumerable<Categorie>> GetCategories()
         {
-            var response = await _httpClient.GetAsync($"{_urlBase}/api/categories");
+            var response = await _httpClient.GetAsync("api/categories");
             var content = await response.Content.ReadAsStringAsync();
 
 

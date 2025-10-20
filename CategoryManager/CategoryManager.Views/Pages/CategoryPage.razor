@@ -1,0 +1,60 @@
+﻿@page "/categories"
+<h3>CategoryPage</h3>
+
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title text-dark m-0">Lista de categorías</h3>
+        <button class="btn btn-primary" @onclick="() => {}">Nueva categoría</button>
+    </div>
+
+    <div class="card-body">
+        @if(ViewModel.Categories == null)
+        {
+            <p>Cargando...</p>
+        }
+        else if (ViewModel.Categories.Count == 0)
+        {
+            <p>Sin categorias</p>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Título</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var Category in ViewModel.Categories)
+                    {
+                    <tr @key="Category.Id">
+                        <td>@Category.Id</td>
+                        <td>@Category.Name</td>
+                        <td>@Category.Description</td>
+                            <td>
+                            @if (Category.IsActive)
+                                {
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-success" @onclick="() => {}">
+                                            Editar
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" @onclick="() => {}">
+                                            Desactivar
+                                        </button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Desactivada</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
