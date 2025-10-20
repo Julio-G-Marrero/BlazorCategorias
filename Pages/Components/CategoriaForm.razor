@@ -1,0 +1,71 @@
+﻿@using BlazorCategorias.Models
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Forms
+
+<h3>CategoriaForm</h3>
+
+<div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.0);">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">@Title</h5>
+                <button type="button" class="btn-close" @onclick="CerrarModalAsync"></button>
+            </div>
+
+            <div class="modal-body">
+                <EditForm Model="@FormModel" OnValidSubmit="@ValidarCategoriaAsync">
+                    <DataAnnotationsValidator />
+
+                    <div class="mb-3">
+                        <label class="form-label" for="titulo">Título</label>
+                        <InputText id="titulo" class="form-control" @bind-Value="FormModel.Name" />
+                        <ValidationMessage For="@(() => FormModel.Name)" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="descripcion">Descripción</label>
+                        <InputText id="descripcion" class="form-control" @bind-Value="FormModel.Description" />
+                        <ValidationMessage For="@(() => FormModel.Description)" />
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-outline-secondary" @onclick="CerrarModalAsync" disabled="@IsSaving">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" disabled="@IsSaving">
+                            @(IsSaving ? (IsEdit ? "Actualizando..." : "Guardando...") : (IsEdit ? "Actualizar" : "Guardar"))
+                        </button>
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(FormError))
+                    {
+                        <div class="alert alert-danger mt-3">@FormError</div>
+                    }
+                </EditForm>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] 
+    public Categorie FormModel { get; set; } = new();
+    [Parameter] 
+    public EventCallback<Categorie> OnSubmit { get; set; }   
+    [Parameter] 
+    public EventCallback OnCancel { get; set; }              
+    [Parameter] 
+    public bool IsSaving { get; set; } = false;              
+    [Parameter] 
+    public string? FormError { get; set; }                   
+    [Parameter] 
+    public bool IsEdit { get; set; } = false;                
+    [Parameter] 
+    public string Title { get; set; } = "Nueva categoría";   
+
+    private async Task ValidarCategoriaAsync()
+        => await OnSubmit.InvokeAsync(FormModel);
+
+    private async Task CerrarModalAsync()
+        => await OnCancel.InvokeAsync();
+}

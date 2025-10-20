@@ -1,0 +1,99 @@
+﻿@page "/categories"
+@using BlazorCategorias.Models
+@using BlazorCategorias.Pages.Components
+@using BlazorCategorias.Services
+@inject ICategoriesCliente CategoriesClient
+
+<h1 class="text-center">Categorías</h1>
+
+@if (!string.IsNullOrWhiteSpace(SuccessMessage))
+{
+    <div class="alert alert-success">@SuccessMessage</div>
+}
+@if (!string.IsNullOrWhiteSpace(ErrorMessage))
+{
+    <div class="alert alert-danger">@ErrorMessage</div>
+}
+
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title text-dark m-0">Lista de categorías</h3>
+        <button class="btn btn-primary" @onclick="NewCategorie">Nueva categoría</button>
+    </div>
+
+    <div class="card-body">
+        @if (IsLoading)
+        {
+            <p>Cargando...</p>
+        }
+        else if (categories.Count == 0)
+        {
+            <p>Sin categorias</p>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Título</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in categories)
+                    {
+                        <tr @key="c.Id">
+                            <td>@c.Id</td>
+                            <td>@c.Name</td>
+                            <td>@c.Description</td>
+                            <td>
+                                @if (c.IsActive)
+                                {
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-success" @onclick="() => EditCategorie(c)">
+                                            Editar
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" @onclick="() => DesactivateCategorie(c.Id)">
+                                            Desactivar
+                                        </button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Desactivada</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+@if (ShowForm)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.0);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@((IsEdit ? "Editar categoría" : "Nueva categoría"))</h5>
+                    <button type="button" class="btn-close" @onclick="CloseModal"></button>
+                </div>
+                <div class="modal-body">
+                    <CategoriaForm FormModel="formModel"
+                    IsEdit="IsEdit"
+                    Title="@(IsEdit ? "Editar categoría" : "Nueva categoría")"
+                    IsSaving="IsSaving"
+                    FormError=""
+                    OnSubmit="SubmitFormAsync"
+                    OnCancel="CloseModal" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
