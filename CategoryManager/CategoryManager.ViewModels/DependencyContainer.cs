@@ -7,6 +7,7 @@ public static class DependencyContainer
     public static IServiceCollection AddCategoryManagerViewModels(this IServiceCollection services)
     {
         services.AddScoped<SearchCategoryViewModel>();
+        services.AddScoped<ActionCategoryViewModel>();
         return services;
     }
 

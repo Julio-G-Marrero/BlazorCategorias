@@ -20,6 +20,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorCategorias", "BlazorCategorias\BlazorCategorias.csproj", "{A387C0FA-52EE-14BB-BB2F-D2FAD051B236}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{AE2BDC88-D1CD-68A9-724B-0BB2BF755B0E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{736C52C6-0C07-4705-AF22-8980E97F7053} = {736C52C6-0C07-4705-AF22-8980E97F7053}
+		{AFCA0EB8-3AC7-43A6-8AE3-7D3C03CAFA9B} = {AFCA0EB8-3AC7-43A6-8AE3-7D3C03CAFA9B}
+		{CDA63C2E-D411-4FC2-B381-E7CE9D4AC09A} = {CDA63C2E-D411-4FC2-B381-E7CE9D4AC09A}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
