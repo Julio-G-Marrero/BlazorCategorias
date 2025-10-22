@@ -28,4 +28,38 @@ public class ActionCategoryViewModel(CategoryProxy proxy, ILogger<ActionCategory
         }
         return result.Success;
     }
+
+    public async Task<bool> UpdateCategoryAsync()
+    {
+        HandlerRequestResult result = await proxy.UpdateCategoryAsync(Category.ToDto());
+        if (!result.Success)
+        {
+            logger.LogError("Failed to update category {Id}: {ErrorMessage}", Category.Id, result.ErrorMessage);
+            OnFailure?.Invoke(this, result.ErrorMessage);
+        }
+        return result.Success;
+    }
+
+    public async Task<bool> DesactivateCategoryAsync(int id)
+    {
+        HandlerRequestResult result = await proxy.DesactivateCategoryAsync(id);
+        if (!result.Success)
+        {
+            logger.LogError("Failed to delete category {Id}: {ErrorMessage}", id, result.ErrorMessage);
+            OnFailure?.Invoke(this, result.ErrorMessage);
+        }
+        return result.Success;
+    }
+
+    public void CategoryInEdit(CategoryModel source)
+    {
+        Category = new CategoryModel
+        {
+            Id = source.Id,
+            Name = source.Name,
+            Description = source.Description,
+            IsActive = source.IsActive
+        };
+    }
+
 }

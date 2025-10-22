@@ -26,74 +26,88 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var Category in ViewModel.Categories)
+                    @foreach (var category in ViewModel.Categories)
                     {
-                    <tr @key="Category.Id">
-                        <td>@Category.Id</td>
-                        <td>@Category.Name</td>
-                        <td>@Category.Description</td>
-                            <td>
-                            @if (Category.IsActive)
-                                {
-                                    <div class="d-flex gap-2">
-                                        <button class="btn btn-sm btn-success" @onclick="() => {}">
-                                            Editar
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger" @onclick="() => {}">
-                                            Desactivar
-                                        </button>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <span class="text-muted">Desactivada</span>
-                                }
-                            </td>
-                        </tr>
+                    <tr @key="category.Id">
+                        <td>@category.Id</td>
+                        <td>@category.Name</td>
+                        <td>@category.Description</td>
+                        <td class="text-end">
+                            <div class="btn-group">
+                                    @if (category.IsActive)
+                                    {
+                                        <button class="btn btn-sm btn-success" @onclick="() => OpenEditModal(category)">Editar</button>
+                                        <button class="btn btn-sm btn-outline-danger" @onclick="() => AskDesactivate(category.Id)">Desactivate</button>
+                                    }else {
+                                        <p>Desactivada</p>
+                                    }
+                            </div>
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
         }
-        @if (ShowCreateModel)
-            {
-                <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,.5);">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
+        @if (ShowFormModal)
+        {
+        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,.5);">
+            <div class="modal-dialog">
+                <div class="modal-content">
 
-                            <div class="modal-header">
-                                <h5 class="modal-title">Nueva categoría</h5>
-                                <button type="button" class="btn-close" aria-label="Close" @onclick="CloseCreateModal"></button>
+                    <div class="modal-header">
+                        <h5 class="modal-title">@(IsEditMode ? "Editar categoría" : "Nueva categoría")</h5>
+                        <button type="button" class="btn-close" aria-label="Close" @onclick="CloseFormModal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <EditForm Model="ActionCategoryViewModel.Category" OnValidSubmit="SubmitFormAsync">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+
+                            <div class="mb-3">
+                                <label class="form-label">Nombre</label>
+                                <InputText class="form-control" @bind-Value="ActionCategoryViewModel.Category.Name" />
                             </div>
 
-                            <div class="modal-body">
-                                <EditForm Model="ActionCategoryViewModel.Category" OnValidSubmit="SubmitCreateAsync">
-                                    <DataAnnotationsValidator />
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Nombre</label>
-                                    <InputText class="form-control" @bind-Value="ActionCategoryViewModel.Category.Name" />
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Descripción</label>
-                                    <InputText class="form-control" @bind-Value="ActionCategoryViewModel.Category.Description" />
-                                    </div>
-
-                                    <div class="d-flex justify-content-end gap-2">
-                                    <button type="button" class="btn btn-secondary" @onclick="CloseCreateModal" disabled="@IsLoading">
-                                            Cancelar
-                                        </button>
-
-                                        <button type="submit" class="btn btn-primary" disabled="@IsLoading">
-                                            @(IsLoading ? "Guardando..." : "Guardar")
-                                        </button>
-                                    </div>
-                                </EditForm>
+                            <div class="mb-3">
+                                <label class="form-label">Descripción</label>
+                                <InputText class="form-control" @bind-Value="ActionCategoryViewModel.Category.Description" />
                             </div>
 
-                        </div>
+                            <div class="d-flex justify-content-end gap-2">
+                                <button type="button" class="btn btn-secondary" @onclick="CloseFormModal" disabled="@IsLoading">
+                                    Cancelar
+                                </button>
+                                <button type="submit" class="btn btn-primary" disabled="@IsLoading">
+                                        @(IsLoading ? "Guardando..." : (IsEditMode ? "Actualizar" : "Guardar"))
+                                </button>
+                            </div>
+                        </EditForm>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        }
+        @if (ShowDesactivateConfirm)
+        {
+        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,.5);">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title">Confirmar</h6>
+                        <button type="button" class="btn-close" @onclick="CancelDesactivate" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-0">¿Desea desactivar la categoria?</p>
+                    </div>
+                    <div class="modal-footer">
+                            <button class="btn btn-secondary btn-sm" @onclick="CancelDesactivate">Cancelar</button>
+                                    <button class="btn btn-danger btn-sm" @onclick="async () => await ConfirmDesactivateAsync()">Eliminar</button>
                     </div>
                 </div>
-            }
+            </div>
+        </div>
+        }
     </div>
 </div>
