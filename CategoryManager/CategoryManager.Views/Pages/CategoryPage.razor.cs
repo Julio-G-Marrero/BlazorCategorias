@@ -1,40 +1,57 @@
 ﻿using CategoryManager.ViewModels.ViewModels;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 namespace CategoryManager.Views.Pages;
-public partial class CategoryPage : ComponentBase, IDisposable
+public partial class CategoryPage : IDisposable
 {
     [Inject]
     public SearchCategoryViewModel ViewModel { get; set; }
+    
     [Inject]
-    public ActionCategoryViewModel ActionCategoryVM { get; set; }
-    private bool _showCreateModal;
+    public ActionCategoryViewModel ActionCategoryViewModel { get; set; }
+
+    [Inject]
+    public ILogger<CategoryPage> Logger { get; set; }
+
+
+    private bool IsLoading;
+
+    private bool ShowCreateModel;
 
     protected override async Task OnInitializedAsync()
     {
         ViewModel.OnFailure += HandleFailure;
-        ActionCategoryVM.OnCategorySaved += HandleCategorySaved;
         await ViewModel.InitializeViewModel();
     }
-    private async void HandleCategorySaved(object? sender, EventArgs e)
+
+    private async void OpenCreateModal()
     {
-        await ViewModel.InitializeViewModel();
-        _showCreateModal = false;
-        await InvokeAsync(StateHasChanged);
-    }
-    private void OpenCreateModal()
-    {
-        ActionCategoryVM.Category = new CategoryManager.ViewModels.Models.CategoryModel();
-        _showCreateModal = true;
+       await  ActionCategoryViewModel.InitializeViewModel();
+       ShowCreateModel = true;
     }
 
     private void CloseCreateModal()
     {
-        _showCreateModal = false;
-        StateHasChanged();
+        ShowCreateModel = false;
     }
     private async Task SubmitCreateAsync()
     {
-        await ActionCategoryVM.SaveAsync();
+        try
+        {
+           IsLoading = true;
+           bool result =  await ActionCategoryViewModel.CreateCategoryAsync();
+           if (result)
+           {
+                ShowCreateModel = false;
+                await ViewModel.LoadCategoriesAsync();
+           }
+        }
+        catch(Exception ex)
+        {
+            Logger.LogError(ex, "Error occurred while creating category.");
+            Console.WriteLine(ex.Message);
+        }
+        IsLoading = false;
     }
 
     private async void HandleFailure(object sender, string errorMessage)
@@ -45,7 +62,6 @@ public partial class CategoryPage : ComponentBase, IDisposable
     public void Dispose()
     {
         ViewModel.OnFailure -= HandleFailure;
-        ActionCategoryVM.OnCategorySaved -= HandleCategorySaved;
     }
 
 }

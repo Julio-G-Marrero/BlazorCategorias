@@ -18,7 +18,7 @@ public class SearchCategoryViewModel(CategoryProxy proxy, ILogger<SearchCategory
     }
 
 
-    private async Task LoadCategoriesAsync()
+    public async Task LoadCategoriesAsync()
     {
         HandlerRequestResult<IEnumerable<CategoryDto>> result;
         result = await proxy.GetAllCategoriesAsync();

@@ -54,7 +54,7 @@
                 </tbody>
             </table>
         }
-        @if (_showCreateModal)
+        @if (ShowCreateModel)
             {
                 <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,.5);">
                     <div class="modal-dialog">
@@ -66,27 +66,26 @@
                             </div>
 
                             <div class="modal-body">
-                                <EditForm Model="ActionCategoryVM.Category" OnValidSubmit="SubmitCreateAsync">
+                                <EditForm Model="ActionCategoryViewModel.Category" OnValidSubmit="SubmitCreateAsync">
                                     <DataAnnotationsValidator />
-                                    <ValidationSummary />
 
                                     <div class="mb-3">
                                         <label class="form-label">Nombre</label>
-                                        <InputText class="form-control" @bind-Value="ActionCategoryVM.Category.Name" />
+                                    <InputText class="form-control" @bind-Value="ActionCategoryViewModel.Category.Name" />
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label">Descripción</label>
-                                        <InputText class="form-control" @bind-Value="ActionCategoryVM.Category.Description" />
+                                    <InputText class="form-control" @bind-Value="ActionCategoryViewModel.Category.Description" />
                                     </div>
 
                                     <div class="d-flex justify-content-end gap-2">
-                                        <button type="button" class="btn btn-secondary" @onclick="CloseCreateModal" disabled="@ActionCategoryVM.IsSaving">
+                                    <button type="button" class="btn btn-secondary" @onclick="CloseCreateModal" disabled="@IsLoading">
                                             Cancelar
                                         </button>
 
-                                        <button type="submit" class="btn btn-primary" disabled="@ActionCategoryVM.IsSaving">
-                                            @(ActionCategoryVM.IsSaving ? "Guardando..." : "Guardar")
+                                        <button type="submit" class="btn btn-primary" disabled="@IsLoading">
+                                            @(IsLoading ? "Guardando..." : "Guardar")
                                         </button>
                                     </div>
                                 </EditForm>
