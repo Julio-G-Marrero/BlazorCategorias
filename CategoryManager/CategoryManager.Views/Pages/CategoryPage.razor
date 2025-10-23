@@ -48,46 +48,45 @@
                 </tbody>
             </table>
         }
-        @if (ShowFormModal)
+        @if (ShowCreateModal)
         {
         <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,.5);">
             <div class="modal-dialog">
                 <div class="modal-content">
-
                     <div class="modal-header">
-                        <h5 class="modal-title">@(IsEditMode ? "Editar categoría" : "Nueva categoría")</h5>
-                        <button type="button" class="btn-close" aria-label="Close" @onclick="CloseFormModal"></button>
+                        <h5 class="modal-title">Nueva categoría</h5>
+                        <button type="button" class="btn-close" @onclick="CloseCreateModal" aria-label="Close"></button>
                     </div>
-
                     <div class="modal-body">
-                        <EditForm Model="ActionCategoryViewModel.Category" OnValidSubmit="SubmitFormAsync">
-                            <DataAnnotationsValidator />
-                            <ValidationSummary />
-
-                            <div class="mb-3">
-                                <label class="form-label">Nombre</label>
-                                <InputText class="form-control" @bind-Value="ActionCategoryViewModel.Category.Name" />
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Descripción</label>
-                                <InputText class="form-control" @bind-Value="ActionCategoryViewModel.Category.Description" />
-                            </div>
-
-                            <div class="d-flex justify-content-end gap-2">
-                                <button type="button" class="btn btn-secondary" @onclick="CloseFormModal" disabled="@IsLoading">
-                                    Cancelar
-                                </button>
-                                <button type="submit" class="btn btn-primary" disabled="@IsLoading">
-                                        @(IsLoading ? "Guardando..." : (IsEditMode ? "Actualizar" : "Guardar"))
-                                </button>
-                            </div>
-                        </EditForm>
+                        <CreateCategoryForm
+                            Model="ActionCategoryViewModel.Category"
+                            IsBusy="IsLoading"
+                            OnCancel="CloseCreateModal"
+                            OnValidSubmit="CreateAsync" />
                     </div>
-
                 </div>
             </div>
         </div>
+        }
+        @if (ShowEditModal)
+        {
+            <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,.5);">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Editar categoría</h5>
+                            <button type="button" class="btn-close" @onclick="CloseEditModal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <EditCategoryForm
+                                Model="ActionCategoryViewModel.Category"
+                                IsBusy="IsLoading"
+                                OnCancel="CloseEditModal"
+                                OnValidSubmit="UpdateAsync" />
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
         @if (ShowDesactivateConfirm)
         {
@@ -103,7 +102,7 @@
                     </div>
                     <div class="modal-footer">
                             <button class="btn btn-secondary btn-sm" @onclick="CancelDesactivate">Cancelar</button>
-                                    <button class="btn btn-danger btn-sm" @onclick="async () => await ConfirmDesactivateAsync()">Eliminar</button>
+                                    <button class="btn btn-danger btn-sm" @onclick="async () => await ConfirmDesactivateAsync()">Desactivar</button>
                     </div>
                 </div>
             </div>

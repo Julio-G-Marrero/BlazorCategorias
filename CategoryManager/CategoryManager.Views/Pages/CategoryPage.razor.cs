@@ -7,53 +7,69 @@ public partial class CategoryPage : IDisposable
 {
     [Inject]
     public SearchCategoryViewModel ViewModel { get; set; }
-    
+
     [Inject]
     public ActionCategoryViewModel ActionCategoryViewModel { get; set; }
 
     [Inject]
     public ILogger<CategoryPage> Logger { get; set; }
 
-
     private bool IsLoading;
-    private bool ShowFormModal;
-    private bool IsEditMode;
     private bool ShowDesactivateConfirm;
     private int PendingDesactivateId;
+    private bool ShowCreateModal;
+    private bool ShowEditModal;
+
     protected override async Task OnInitializedAsync()
     {
         ViewModel.OnFailure += HandleFailure;
         await ViewModel.InitializeViewModel();
     }
 
-    private async void OpenCreateModal()
+    private async Task OpenCreateModal()
     {
-        await  ActionCategoryViewModel.InitializeViewModel();
-        ShowFormModal = true;
-        IsEditMode = false;
+        await ActionCategoryViewModel.InitializeViewModel();
+        ShowCreateModal = true;
     }
+    private void CloseCreateModal() => ShowCreateModal = false;
 
-    private void CloseFormModal() => ShowFormModal = false;
-    private void CancelDesactivate() => ShowDesactivateConfirm = false;
 
-    private async Task SubmitFormAsync()
+    private async Task CreateAsync()
     {
         try
         {
             IsLoading = true;
-            bool actionBool = IsEditMode
-                ? await ActionCategoryViewModel.UpdateCategoryAsync()
-                : await ActionCategoryViewModel.CreateCategoryAsync();
-
-            if (actionBool)
+            var ok = await ActionCategoryViewModel.CreateCategoryAsync();
+            if (ok)
             {
-                ShowFormModal = false;
+                ShowCreateModal = false;
                 await ViewModel.InitializeViewModel();
             }
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Error al guardar categoria.");
+            Logger.LogError(ex, "Error al crear categoría.");
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+    private async Task UpdateAsync()
+    {
+        try
+        {
+            IsLoading = true;
+            var ok = await ActionCategoryViewModel.UpdateCategoryAsync();
+            if (ok)
+            {
+                ShowEditModal = false;
+                await ViewModel.InitializeViewModel();
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error al actualizar categoría.");
         }
         finally
         {
@@ -73,32 +89,30 @@ public partial class CategoryPage : IDisposable
 
     private void OpenEditModal(CategoryManager.ViewModels.Models.CategoryModel category)
     {
-        IsEditMode = true;
         ActionCategoryViewModel.CategoryInEdit(category);
-        ShowFormModal = true;
+        ShowEditModal = true;
     }
+    private void CloseEditModal() => ShowEditModal = false;
+
     private void AskDesactivate(int id)
     {
         PendingDesactivateId = id;
         ShowDesactivateConfirm = true;
     }
-
+    private void CancelDesactivate() => ShowDesactivateConfirm = false;
     private async Task ConfirmDesactivateAsync()
     {
         try
         {
             IsLoading = true;
-            bool actionBool = await ActionCategoryViewModel.DesactivateCategoryAsync(PendingDesactivateId);
+            var ok = await ActionCategoryViewModel.DesactivateCategoryAsync(PendingDesactivateId);
             ShowDesactivateConfirm = false;
-
-            if (actionBool)
-            {
-                await ViewModel.InitializeViewModel(); // refresca la tabla
-            }
+            if (ok)
+                await ViewModel.InitializeViewModel();
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Error al eliminar categoria {Id}.", PendingDesactivateId);
+            Logger.LogError(ex, "Error al desactivar categoría {Id}.", PendingDesactivateId);
         }
         finally
         {
