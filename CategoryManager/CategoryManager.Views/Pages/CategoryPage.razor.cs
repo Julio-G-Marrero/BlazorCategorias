@@ -31,7 +31,6 @@ public partial class CategoryPage : IDisposable
         await ActionCategoryViewModel.InitializeViewModel();
         ShowCreateModal = true;
     }
-    private void CloseCreateModal() => ShowCreateModal = false;
 
 
     private async Task CreateAsync()
@@ -39,8 +38,8 @@ public partial class CategoryPage : IDisposable
         try
         {
             IsLoading = true;
-            var ok = await ActionCategoryViewModel.CreateCategoryAsync();
-            if (ok)
+            var result = await ActionCategoryViewModel.CreateCategoryAsync();
+            if (result)
             {
                 ShowCreateModal = false;
                 await ViewModel.InitializeViewModel();
@@ -60,11 +59,12 @@ public partial class CategoryPage : IDisposable
         try
         {
             IsLoading = true;
-            var ok = await ActionCategoryViewModel.UpdateCategoryAsync();
-            if (ok)
+            var result = await ActionCategoryViewModel.UpdateCategoryAsync();
+            if (result)
             {
                 ShowEditModal = false;
                 await ViewModel.InitializeViewModel();
+
             }
         }
         catch (Exception ex)
@@ -105,10 +105,13 @@ public partial class CategoryPage : IDisposable
         try
         {
             IsLoading = true;
-            var ok = await ActionCategoryViewModel.DesactivateCategoryAsync(PendingDesactivateId);
+            var result = await ActionCategoryViewModel.DesactivateCategoryAsync(PendingDesactivateId);
             ShowDesactivateConfirm = false;
-            if (ok)
+            if (result)
+            {
                 await ViewModel.InitializeViewModel();
+            }
+
         }
         catch (Exception ex)
         {
