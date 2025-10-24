@@ -1,7 +1,7 @@
 ﻿using CategoryManager.ViewModels.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
-using Domain.Application.Abstractions;
+using Microsoft.JSInterop;
 namespace CategoryManager.Views.Pages;
 public partial class CategoryPage : IDisposable
 {
@@ -14,8 +14,9 @@ public partial class CategoryPage : IDisposable
     [Inject]
     public ILogger<CategoryPage> Logger { get; set; }
 
-    [Inject] 
-    public IToastService Toast { get; set; } = default!;
+    [Inject]
+
+    public IJSRuntime JsRuntime { get; set; }
 
     private bool IsLoading;
     private bool ShowDesactivateConfirm;
@@ -46,13 +47,13 @@ public partial class CategoryPage : IDisposable
             {
                 ShowCreateModal = false;
                 await ViewModel.InitializeViewModel();
-                await Toast.ShowInfoToast("Categoria creada correctamente", "success");
+                await JsRuntime.InvokeVoidAsync("toastHelper.show", "Categoria creada correctamente", "success", 3000);
             }
         }
         catch (Exception ex)
         {
             Logger.LogError(ex, "Error al crear categoría.");
-            await Toast.ShowInfoToast("Error inesperado al crear la categoria", "error");
+            await JsRuntime.InvokeVoidAsync("toastHelper.show", "Error inesperado al crear la categoria", "error", 3000);
 
         }
         finally
