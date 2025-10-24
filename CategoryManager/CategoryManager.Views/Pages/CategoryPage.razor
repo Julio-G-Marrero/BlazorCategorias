@@ -55,13 +55,13 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Nueva categoría</h5>
-                        <button type="button" class="btn-close" @onclick="CloseCreateModal" aria-label="Close"></button>
+                         <button type="button" class="btn-close" @onclick="() => {ShowCreateModal = false; }" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <CreateCategoryForm
                             Model="ActionCategoryViewModel.Category"
                             IsBusy="IsLoading"
-                            OnCancel="CloseCreateModal"
+                            OnCancel="() => ShowCreateModal = false"
                             OnValidSubmit="CreateAsync" />
                     </div>
                 </div>

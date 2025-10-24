@@ -34,7 +34,6 @@ public partial class CategoryPage : IDisposable
         await ActionCategoryViewModel.InitializeViewModel();
         ShowCreateModal = true;
     }
-    private void CloseCreateModal() => ShowCreateModal = false;
 
 
     private async Task CreateAsync()
@@ -71,7 +70,6 @@ public partial class CategoryPage : IDisposable
             {
                 ShowEditModal = false;
                 await ViewModel.InitializeViewModel();
-                await Toast.ShowInfoToast("Categoría actualizada", "success");
             }
         }
         catch (Exception ex)
@@ -115,10 +113,8 @@ public partial class CategoryPage : IDisposable
             IsLoading = true;
             var result = await ActionCategoryViewModel.DesactivateCategoryAsync(PendingDesactivateId);
             ShowDesactivateConfirm = false;
-            if (result) {
+            if (ok)
                 await ViewModel.InitializeViewModel();
-                await Toast.ShowInfoToast("Categoría desactivada", "warn");
-            }
         }
         catch (Exception ex)
         {
