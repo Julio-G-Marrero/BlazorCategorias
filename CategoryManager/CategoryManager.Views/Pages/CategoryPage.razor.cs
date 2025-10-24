@@ -1,4 +1,5 @@
 ﻿using CategoryManager.ViewModels.ViewModels;
+using Common.Views.Tostify;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
@@ -24,6 +25,8 @@ public partial class CategoryPage : IDisposable
     private bool ShowCreateModal;
     private bool ShowEditModal;
 
+    private Tostify Tostify;
+
     protected override async Task OnInitializedAsync()
     {
         ViewModel.OnFailure += HandleFailure;
@@ -47,7 +50,7 @@ public partial class CategoryPage : IDisposable
             {
                 ShowCreateModal = false;
                 await ViewModel.InitializeViewModel();
-                await JsRuntime.InvokeVoidAsync("toastHelper.show", "Categoria creada correctamente", "success", 3000);
+                await Tostify.ShowSuccessToast("Categoria Creada Correctamente");
             }
         }
         catch (Exception ex)

@@ -15,9 +15,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.10" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Common\Common.Views\Common.Views.csproj" />
-    <ProjectReference Include="..\CategoryManager.ViewModels\CategoryManager.ViewModels.csproj" />
-  </ItemGroup>
-
 </Project>
