@@ -70,6 +70,7 @@ public partial class CategoryPage : IDisposable
             {
                 ShowEditModal = false;
                 await ViewModel.InitializeViewModel();
+
             }
         }
         catch (Exception ex)
@@ -113,8 +114,11 @@ public partial class CategoryPage : IDisposable
             IsLoading = true;
             var result = await ActionCategoryViewModel.DesactivateCategoryAsync(PendingDesactivateId);
             ShowDesactivateConfirm = false;
-            if (ok)
+            if (result)
+            {
                 await ViewModel.InitializeViewModel();
+            }
+
         }
         catch (Exception ex)
         {
