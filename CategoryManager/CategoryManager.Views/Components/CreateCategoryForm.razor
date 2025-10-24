@@ -23,10 +23,3 @@
         </button>
     </div>
 </EditForm>
-
-@code {
-    [Parameter] public CategoryModel Model { get; set; } = default!;
-    [Parameter] public bool IsBusy { get; set; }
-    [Parameter] public EventCallback OnCancel { get; set; }
-    [Parameter] public EventCallback OnValidSubmit { get; set; }
-}

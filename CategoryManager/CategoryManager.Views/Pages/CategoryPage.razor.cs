@@ -1,7 +1,7 @@
 ﻿using CategoryManager.ViewModels.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
-
+using Domain.Application.Abstractions;
 namespace CategoryManager.Views.Pages;
 public partial class CategoryPage : IDisposable
 {
@@ -13,6 +13,9 @@ public partial class CategoryPage : IDisposable
 
     [Inject]
     public ILogger<CategoryPage> Logger { get; set; }
+
+    [Inject] 
+    public IToastService Toast { get; set; } = default!;
 
     private bool IsLoading;
     private bool ShowDesactivateConfirm;
@@ -39,16 +42,19 @@ public partial class CategoryPage : IDisposable
         try
         {
             IsLoading = true;
-            var ok = await ActionCategoryViewModel.CreateCategoryAsync();
-            if (ok)
+            var result = await ActionCategoryViewModel.CreateCategoryAsync();
+            if (result)
             {
                 ShowCreateModal = false;
                 await ViewModel.InitializeViewModel();
+                await Toast.ShowInfoToast("Categoria creada correctamente", "success");
             }
         }
         catch (Exception ex)
         {
             Logger.LogError(ex, "Error al crear categoría.");
+            await Toast.ShowInfoToast("Error inesperado al crear la categoria", "error");
+
         }
         finally
         {
@@ -60,15 +66,17 @@ public partial class CategoryPage : IDisposable
         try
         {
             IsLoading = true;
-            var ok = await ActionCategoryViewModel.UpdateCategoryAsync();
-            if (ok)
+            var result = await ActionCategoryViewModel.UpdateCategoryAsync();
+            if (result)
             {
                 ShowEditModal = false;
                 await ViewModel.InitializeViewModel();
+                await Toast.ShowInfoToast("Categoría actualizada", "success");
             }
         }
         catch (Exception ex)
         {
+            await Toast.ShowInfoToast("Error inesperado al actualizar la categoría", "error");
             Logger.LogError(ex, "Error al actualizar categoría.");
         }
         finally
@@ -105,14 +113,17 @@ public partial class CategoryPage : IDisposable
         try
         {
             IsLoading = true;
-            var ok = await ActionCategoryViewModel.DesactivateCategoryAsync(PendingDesactivateId);
+            var result = await ActionCategoryViewModel.DesactivateCategoryAsync(PendingDesactivateId);
             ShowDesactivateConfirm = false;
-            if (ok)
+            if (result) {
                 await ViewModel.InitializeViewModel();
+                await Toast.ShowInfoToast("Categoría desactivada", "warn");
+            }
         }
         catch (Exception ex)
         {
             Logger.LogError(ex, "Error al desactivar categoría {Id}.", PendingDesactivateId);
+            await Toast.ShowInfoToast("Error inesperado al desactivar la categoría", "error");
         }
         finally
         {

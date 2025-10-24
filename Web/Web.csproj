@@ -1,8 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -13,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CategoryManager\CategoryManager.Views\CategoryManager.Views.csproj" />
+    <ProjectReference Include="..\Common\Domain\Domain.csproj" />
   </ItemGroup>
 
 </Project>
