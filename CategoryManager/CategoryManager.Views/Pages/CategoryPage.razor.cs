@@ -70,7 +70,7 @@ public partial class CategoryPage : IDisposable
             {
                 ShowEditModal = false;
                 await ViewModel.InitializeViewModel();
-
+                await Toast.ShowInfoToast("Categoria Actualizada Correctamente", "success");
             }
         }
         catch (Exception ex)
@@ -117,6 +117,8 @@ public partial class CategoryPage : IDisposable
             if (result)
             {
                 await ViewModel.InitializeViewModel();
+                await Toast.ShowInfoToast("Categoria Desactivada Correctamente", "warn");
+
             }
 
         }
