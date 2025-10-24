@@ -54,7 +54,6 @@ public partial class CategoryPage : IDisposable
         {
             Logger.LogError(ex, "Error al crear categoría.");
             await JsRuntime.InvokeVoidAsync("toastHelper.show", "Error inesperado al crear la categoria", "error", 3000);
-
         }
         finally
         {
@@ -71,12 +70,13 @@ public partial class CategoryPage : IDisposable
             {
                 ShowEditModal = false;
                 await ViewModel.InitializeViewModel();
-                await Toast.ShowInfoToast("Categoria Actualizada Correctamente", "success");
+                await JsRuntime.InvokeVoidAsync("toastHelper.show", "Categoria Actualizada Correctamente", "success", 3000);
+
             }
         }
         catch (Exception ex)
         {
-            await Toast.ShowInfoToast("Error inesperado al actualizar la categoría", "error");
+            await JsRuntime.InvokeVoidAsync("toastHelper.show", "Error inesperado al actualizar la categoría", "error", 3000);
             Logger.LogError(ex, "Error al actualizar categoría.");
         }
         finally
@@ -118,15 +118,13 @@ public partial class CategoryPage : IDisposable
             if (result)
             {
                 await ViewModel.InitializeViewModel();
-                await Toast.ShowInfoToast("Categoria Desactivada Correctamente", "warn");
-
+                await JsRuntime.InvokeVoidAsync("toastHelper.show", "Categoria Desactivada Correctamente", "success", 3000);
             }
 
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Error al desactivar categoría {Id}.", PendingDesactivateId);
-            await Toast.ShowInfoToast("Error inesperado al desactivar la categoría", "error");
+            await JsRuntime.InvokeVoidAsync("toastHelper.show", "Error al desactivar categoría", "error", 3000);
         }
         finally
         {
