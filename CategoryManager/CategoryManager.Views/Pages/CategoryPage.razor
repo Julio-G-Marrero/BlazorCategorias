@@ -28,7 +28,7 @@
                 <tbody>
                     @foreach (var category in ViewModel.Categories)
                     {
-                    <tr @key="category.Id">
+                    <tr id="row-@category.Id" @key="category.Id">
                         <td>@category.Id</td>
                         <td>@category.Name</td>
                         <td>@category.Description</td>
@@ -50,7 +50,7 @@
         }
         @if (ShowCreateModal)
         {
-        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,.5);">
+        <div id="createModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,.5);">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -70,7 +70,7 @@
         }
         @if (ShowEditModal)
         {
-            <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,.5);">
+             <div id="editModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,.5);">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -90,7 +90,7 @@
         }
         @if (ShowDesactivateConfirm)
         {
-        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,.5);">
+          <div id="confirmModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,.5);">
             <div class="modal-dialog modal-sm">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -110,4 +110,5 @@
         }
     </div>
 </div>
-<Common.Views.Tostify.Tostify @ref="Tostify" ></Common.Views.Tostify.Tostify>
+<Common.Views.Tostify.Tostify  @ref="Tostify" />
+<Common.Views.Animations.Animations @ref="Animations" />

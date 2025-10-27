@@ -1,4 +1,5 @@
 ﻿using CategoryManager.ViewModels.ViewModels;
+using Common.Views.Animations;
 using Common.Views.Tostify;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
@@ -26,12 +27,24 @@ public partial class CategoryPage : IDisposable
     private bool ShowEditModal;
 
     private Tostify Tostify;
-
+    private Animations Animations;
     protected override async Task OnInitializedAsync()
     {
         ViewModel.OnFailure += HandleFailure;
         await ViewModel.InitializeViewModel();
     }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (ShowCreateModal && Animations != null)
+            await Animations.AnimateModalOpenAsync("#createModal");
+
+        if (ShowEditModal && Animations != null)
+            await Animations.AnimateModalOpenAsync("#editModal");
+
+        if (ShowDesactivateConfirm && Animations != null)
+            await Animations.AnimateModalOpenAsync("#confirmModal");
+    }
+
 
     private async Task OpenCreateModal()
     {
@@ -73,8 +86,7 @@ public partial class CategoryPage : IDisposable
             {
                 ShowEditModal = false;
                 await ViewModel.InitializeViewModel();
-                await JsRuntime.InvokeVoidAsync("toastHelper.show", "Categoria Actualizada Correctamente", "success", 3000);
-
+                await Tostify.ShowSuccessToast("Categoria Actualizada Correctamente");
             }
         }
         catch (Exception ex)
@@ -103,7 +115,10 @@ public partial class CategoryPage : IDisposable
         ActionCategoryViewModel.CategoryInEdit(category);
         ShowEditModal = true;
     }
-    private void CloseEditModal() => ShowEditModal = false;
+    private async void CloseEditModal() { 
+        ShowEditModal = false;
+    }
+
 
     private void AskDesactivate(int id)
     {
@@ -116,12 +131,20 @@ public partial class CategoryPage : IDisposable
         try
         {
             IsLoading = true;
-            var result = await ActionCategoryViewModel.DesactivateCategoryAsync(PendingDesactivateId);
             ShowDesactivateConfirm = false;
+            if (Animations != null)
+            {
+                await Animations.FadeOutRowAsync($"#row-{PendingDesactivateId}");
+            }
+            var result = await ActionCategoryViewModel.DesactivateCategoryAsync(PendingDesactivateId);
             if (result)
             {
                 await ViewModel.InitializeViewModel();
-                await JsRuntime.InvokeVoidAsync("toastHelper.show", "Categoria Desactivada Correctamente", "success", 3000);
+                if (Tostify != null)
+                {
+                    await Tostify.ShowSuccessToast("Categoria Desactivada Correctamente");
+                }
+
             }
 
         }
