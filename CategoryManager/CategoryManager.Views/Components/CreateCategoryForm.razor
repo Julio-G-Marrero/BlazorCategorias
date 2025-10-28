@@ -1,23 +1,23 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
 @using CategoryManager.ViewModels.Models
 
-<EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+<EditForm class="edit-form" Model="Model" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
 
-    <div class="mb-3">
+    <div class="field">
         <label class="form-label">Nombre</label>
-        <InputText class="form-control" @bind-Value="Model.Name" />
+        <InputText class="input" @bind-Value="Model.Name" />
         <ValidationMessage For="() => Model.Name" />
     </div>
 
-    <div class="mb-3">
+    <div class="field">
         <label class="form-label">Descripción</label>
-        <InputText class="form-control" @bind-Value="Model.Description" />
+        <InputText class="input" @bind-Value="Model.Description" />
         <ValidationMessage For="() => Model.Description" />
     </div>
 
-    <div class="d-flex justify-content-end gap-2">
-        <button type="button" class="btn btn-secondary" @onclick="OnCancel" disabled="@IsBusy">Cancelar</button>
+    <div class="actions">
+        <button type="button" class="boton" @onclick="OnCancel" disabled="@IsBusy">Cancelar</button>
         <button type="submit" class="btn btn-primary" disabled="@IsBusy">
             @(IsBusy ? "Guardando..." : "Guardar")
         </button>

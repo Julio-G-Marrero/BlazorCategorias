@@ -1,0 +1,102 @@
+.edit-form {
+    display: grid;
+    gap: 1rem;
+    padding: .5rem;
+}
+
+.field {
+    display: grid;
+    gap: .3rem;
+}
+
+.field > label {
+    font-size: .9rem;
+    color: #9aa0aa;
+}
+
+.input {
+    padding: .55rem .75rem;
+    border-radius: 10px;
+    border: 1px solid #2a2d35;
+    background: #0f1116;
+    color: #eaecef;
+    font-size: .95rem;
+    transition: all .2s ease;
+}
+
+    .input:focus-visible {
+        outline: 2px solid #5cc8ff;
+        outline-offset: 2px;
+        border-color: #374151;
+        background: #13161e;
+    }
+
+::deep(.validation-message) {
+    color: #e53935;
+    font-size: .8rem;
+    margin-top: .1rem;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: .6rem;
+    margin-top: .5rem;
+}
+
+:host {
+    animation: form-enter .25s ease-out;
+}
+
+@keyframes form-enter {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    padding: .55rem .95rem;
+    border-radius: 10px;
+    border: none;
+    font-size: .9rem;
+    font-weight: 500;
+    letter-spacing: .015em;
+    background: linear-gradient(180deg, #5cc8ff 0%, #46b3eb 100%);
+    color: #0b0f15;
+    box-shadow: 0 4px 12px rgba(92, 200, 255, 0.35);
+    cursor: pointer;
+    transition: all .25s ease;
+}
+
+    .boton:hover:not(:disabled) {
+        filter: brightness(1.08);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 14px rgba(92, 200, 255, 0.45);
+    }
+
+    .boton:active:not(:disabled) {
+        transform: translateY(1px);
+        box-shadow: 0 3px 8px rgba(92, 200, 255, 0.25);
+    }
+
+    .boton:focus-visible {
+        outline: 2px solid #5cc8ff;
+        outline-offset: 2px;
+    }
+
+    .boton:disabled,
+    .boton[disabled] {
+        opacity: .6;
+        cursor: not-allowed;
+        filter: none;
+        box-shadow: none;
+    }
