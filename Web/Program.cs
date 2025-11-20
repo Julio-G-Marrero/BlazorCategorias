@@ -1,5 +1,7 @@
 using CategoryManager.Proxy;
+using ProductManager.Proxy;
 using CategoryManager.ViewModels;
+using ProductManager.ViewModels;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Web;
@@ -14,4 +16,9 @@ builder.Services.AddCategoryManagerProxies(proxy =>
 {
     proxy.BaseAddress = new Uri(builder.Configuration["WebApiAddress"]);
 });
+builder.Services.AddProductManagerProxies(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["WebApiAddress"]);
+});
+builder.Services.AddProductManagerViewModels();
 await builder.Build().RunAsync();
