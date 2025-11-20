@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CategoryManager\CategoryManager.Views\CategoryManager.Views.csproj" />
     <ProjectReference Include="..\Common\Domain\Domain.csproj" />
+    <ProjectReference Include="..\ProductManager\ProductManager.Views\ProductManager.Views.csproj" />
   </ItemGroup>
 
 </Project>

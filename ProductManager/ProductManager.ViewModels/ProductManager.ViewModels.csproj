@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CategoryManager\CategoryManager.ViewModels\CategoryManager.ViewModels.csproj" />
-    <ProjectReference Include="..\Common\Domain\Domain.csproj" />
     <ProjectReference Include="..\ProductManager.Proxy\ProductManager.Proxy.csproj" />
   </ItemGroup>
   

@@ -1,5 +1,4 @@
-﻿using CategoryManager.ViewModels.Models;
-using Domain.ValueObjects;
+﻿using Domain.ValueObjects;
 using Microsoft.Extensions.Logging;
 using ProductManager.Proxy;
 using ProductManager.ViewModels.Adapters;
