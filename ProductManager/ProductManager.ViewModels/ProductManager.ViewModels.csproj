@@ -7,12 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\CategoryManager\CategoryManager.Proxy\CategoryManager.Proxy.csproj" />
     <ProjectReference Include="..\ProductManager.Proxy\ProductManager.Proxy.csproj" />
   </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.10" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 
 </Project>

@@ -14,6 +14,7 @@
     <ProjectReference Include="..\CategoryManager\CategoryManager.Views\CategoryManager.Views.csproj" />
     <ProjectReference Include="..\Common\Domain\Domain.csproj" />
     <ProjectReference Include="..\ProductManager\ProductManager.Views\ProductManager.Views.csproj" />
+    <ProjectReference Include="..\UserManager\UserManager.Views\UserManager.Views.csproj" />
   </ItemGroup>
 
 </Project>

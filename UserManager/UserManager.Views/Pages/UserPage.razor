@@ -1,0 +1,149 @@
+﻿@page "/users"
+
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title text-dark m-0">Lista de Usuarios</h3>
+        <button class="btn btn-primary" @onclick="OpenCreateModal">Nuevo Usuario</button>
+    </div>
+
+    <div class="card-body mx-15">
+        @if (ViewModel.Users == null)
+        {
+            <p>Cargando...</p>
+        }
+        else if (ViewModel.Users.Count == 0)
+        {
+            <p>Sin usuarios</p>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Usuario</th>
+                        <th>Apellidos</th>
+                        <th>Email</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in ViewModel.Users)
+                    {
+                        <tr id="row-@user.Id" @key="user.Id">
+                            <td>@user.Id</td>
+                            <td>@user.UserName</td>
+                            <td>@user.Surnames</td>
+                            <td>@user.Email</td>
+                            <td>@(user.IsActive ? "Activo" : "Inactivo")</td>
+                            <td class="text-end">
+                                <div class="btn-group">
+                                    @if (user.IsActive)
+                                    {
+                                        <button class="btn btn-sm btn-success"
+                                                @onclick="() => OpenEditModal(user)">
+                                            Editar
+                                        </button>
+
+                                        <button class="btn btn-sm btn-outline-danger"
+                                                @onclick="() => AskDesactivate(user.Id)">
+                                            Desactivar
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Desactivado</span>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        @if (ShowCreateModal)
+        {
+            <div id="createModal"
+                 class="modal fade show d-block"
+                 tabindex="-1"
+                 style="background-color: rgba(0,0,0,.5);">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Nuevo usuario</h5>
+                            <button type="button" class="btn-close"
+                                    @onclick="CloseCreateModal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <CreateUserForm
+                                Model="ActionUserViewModel.User"
+                                IsBusy="IsLoading"
+                                OnCancel="CloseCreateModal"
+                                OnValidSubmit="CreateAsync" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (ShowEditModal)
+        {
+            <div id="editModal"
+                 class="modal fade show d-block"
+                 tabindex="-1"
+                 style="background-color: rgba(0,0,0,.5);">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Editar usuario</h5>
+                            <button type="button" class="btn-close"
+                                    @onclick="CloseEditModal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <EditUserForm
+                                Model="ActionUserViewModel.User"
+                                IsBusy="IsLoading"
+                                OnCancel="CloseEditModal"
+                                OnValidSubmit="UpdateAsync" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (ShowDesactivateConfirm)
+        {
+            <div id="confirmModal"
+                 class="modal fade show d-block"
+                 tabindex="-1"
+                 style="background-color: rgba(0,0,0,.5);">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title">Confirmar</h6>
+                            <button type="button" class="btn-close"
+                                    @onclick="CancelDesactivate"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-0">¿Desea desactivar el usuario?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary btn-sm"
+                                    @onclick="CancelDesactivate">
+                                Cancelar
+                            </button>
+                            <button class="btn btn-danger btn-sm"
+                                    @onclick="ConfirmDesactivateAsync">
+                                Desactivar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

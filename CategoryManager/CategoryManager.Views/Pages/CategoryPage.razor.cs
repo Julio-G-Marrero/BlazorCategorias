@@ -1,9 +1,10 @@
 ﻿using CategoryManager.ViewModels.ViewModels;
-using Common.Views.Animations;
-using Common.Views.Tostify;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
+using Common.Views.Tostify;
+using Common.Views.Animations;
+
 namespace CategoryManager.Views.Pages;
 public partial class CategoryPage : IDisposable
 {

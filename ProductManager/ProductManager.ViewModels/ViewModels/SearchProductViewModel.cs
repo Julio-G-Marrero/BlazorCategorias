@@ -1,33 +1,36 @@
-﻿using Domain.Categories;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Domain.Products;
 using Domain.ValueObjects;
 using Microsoft.Extensions.Logging;
-using ProductManager.Proxy;
+using ProductManager.Proxy.Interfaces;
 using ProductManager.ViewModels.Adapters;
 using ProductManager.ViewModels.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProductManager.ViewModels.ViewModels;
 
-public class SearchProductViewModel(ProductProxy proxy, ILogger<SearchProductViewModel> logger)
+public class SearchProductViewModel(IProductProxy proxy, ILogger<SearchProductViewModel> logger)
 {
-    public List<ProductModel> Products { get; set; }
-    public EventHandler<string> OnFailure { get; set; }
+    public List<ProductModel> Products { get; set; } = new();
+
+    public EventHandler<string>? OnFailure { get; set; }
+
     public async Task InitializeViewModel()
     {
         await LoadProductsAsync();
     }
+
     public async Task LoadProductsAsync()
     {
-        HandlerRequestResult<IEnumerable<ProductDto>> result;
-        result = await proxy.GetAllProductAsync();
+        HandlerRequestResult<IEnumerable<ProductDto>> result =
+            await proxy.GetAllProductAsync();
+
         if (result.Success)
         {
-            Products = result.SuccessValue.ToModelList();
+            var data = result.SuccessValue ?? Array.Empty<ProductDto>();
+            Products = data.ToModelList();
         }
         else
         {

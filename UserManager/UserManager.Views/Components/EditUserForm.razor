@@ -1,0 +1,35 @@
+﻿<EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <InputText class="form-control" @bind-Value="Model.UserName" />
+        <ValidationMessage For="@(() => Model.UserName)" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Apellidos</label>
+        <InputText class="form-control" @bind-Value="Model.Surnames" />
+        <ValidationMessage For="@(() => Model.Surnames)" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <InputText class="form-control" @bind-Value="Model.Email" />
+        <ValidationMessage For="@(() => Model.Email)" />
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+        <button type="button"
+                class="btn btn-secondary"
+                @onclick="OnCancel"
+                disabled="@IsBusy">
+            Cancelar
+        </button>
+        <button type="submit"
+                class="btn btn-success"
+                disabled="@IsBusy">
+            @(IsBusy ? "Actualizando..." : "Actualizar")
+        </button>
+    </div>
+</EditForm>

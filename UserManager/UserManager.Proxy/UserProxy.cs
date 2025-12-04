@@ -1,78 +1,85 @@
-﻿using Domain.Products;
+﻿using Domain.Users;
 using Domain.ValueObjects;
 using Microsoft.Extensions.Logging;
-using ProductManager.Proxy.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using UserManager.Proxy.Interfaces;
 
-namespace ProductManager.Proxy;
+namespace UserManager.Proxy;
 
-public class ProductProxy : IProductProxy
+public class UserProxy : IUserProxy
 {
     private readonly HttpClient _httpClient;
-    private readonly ILogger<ProductProxy> _logger;
+    private readonly ILogger<UserProxy> _logger;
 
-    private const string BaseRoute = "api/products";
+    private const string BaseRoute = "api/users";
 
-    public ProductProxy(HttpClient httpClient, ILogger<ProductProxy> logger)
+    public UserProxy(HttpClient httpClient, ILogger<UserProxy> logger)
     {
         _httpClient = httpClient;
         _logger = logger;
     }
 
-    public async Task<HandlerRequestResult<IEnumerable<ProductDto>>> GetAllProductAsync()
+    public async Task<HandlerRequestResult<IEnumerable<UserDto>>> GetAllUsersAsync()
     {
-        HandlerRequestResult<IEnumerable<ProductDto>> result;
+        HandlerRequestResult<IEnumerable<UserDto>> result;
+
         try
         {
             var response = await _httpClient.GetAsync(BaseRoute);
-            result = await response.Content.ReadFromJsonAsync<HandlerRequestResult<IEnumerable<ProductDto>>>();
+            result = await response.Content.ReadFromJsonAsync<HandlerRequestResult<IEnumerable<UserDto>>>();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while fetching all products.");
+            _logger.LogError(ex, "Error occurred while fetching all users.");
             throw;
         }
+
         return result;
     }
 
-    public async Task<HandlerRequestResult> AddProductAsync(ProductDto productDto)
+    public async Task<HandlerRequestResult> CreateUserAsync(UserDto dto)
     {
         HandlerRequestResult result;
+
         try
         {
-            var response = await _httpClient.PostAsJsonAsync(BaseRoute, productDto);
+            var response = await _httpClient.PostAsJsonAsync(BaseRoute, dto);
             result = await response.Content.ReadFromJsonAsync<HandlerRequestResult>();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while adding a new product.");
+            _logger.LogError(ex, "Error occurred while creating a new user.");
             throw;
         }
+
         return result;
     }
 
-    public async Task<HandlerRequestResult> UpdateProductAsync(ProductDto productDto)
+    public async Task<HandlerRequestResult> UpdateUserAsync(UserDto dto)
     {
         HandlerRequestResult result;
+
         try
         {
-            var response = await _httpClient.PutAsJsonAsync(BaseRoute, productDto);
+            var response = await _httpClient.PutAsJsonAsync(BaseRoute, dto);
             result = await response.Content.ReadFromJsonAsync<HandlerRequestResult>();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while updating product {Id}.", productDto.Id);
+            _logger.LogError(ex, "Error occurred while updating user {Id}.", dto.Id);
             throw;
         }
+
         return result;
     }
 
-    public async Task<HandlerRequestResult> DesactivateProductAsync(int id)
+    public async Task<HandlerRequestResult> DeactivateUserAsync(int id)
     {
         HandlerRequestResult result;
+
         try
         {
             var response = await _httpClient.DeleteAsync($"{BaseRoute}/{id}");
@@ -80,9 +87,10 @@ public class ProductProxy : IProductProxy
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while deleting product {Id}.", id);
+            _logger.LogError(ex, "Error occurred while deactivating user {Id}.", id);
             throw;
         }
+
         return result;
     }
 }

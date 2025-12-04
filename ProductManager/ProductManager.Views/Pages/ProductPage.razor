@@ -1,3 +1,150 @@
 ﻿@page "/products"
 
-<h1>Productos</h1>
+<div class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title text-dark m-0">Lista de Productos</h3>
+        <button class="btn btn-primary" @onclick="OpenCreateModal">Nuevo Producto</button>
+    </div>
+
+    <div class="card-body mx-15">
+        @if (ViewModel.Products == null)
+        {
+            <p>Cargando...</p>
+        }
+        else if (ViewModel.Products.Count == 0)
+        {
+            <p>Sin Productos</p>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Título</th>
+                        <th>Descripción</th>
+                        <th>Categoría</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in ViewModel.Products)
+                    {
+                        <tr id="row-@product.Id" @key="product.Id">
+                            <td>@product.Id</td>
+                            <td>@product.Name</td>
+                            <td>@product.Description</td>
+                            <td>@product.CategoryName</td>
+                            <td class="text-end">
+                                <div class="btn-group">
+                                    @if (product.IsActive)
+                                    {
+                                        <button class="btn btn-sm btn-success"
+                                                @onclick="() => OpenEditModal(product)">
+                                            Editar
+                                        </button>
+
+                                        <button class="btn btn-sm btn-outline-danger"
+                                                @onclick="() => AskDesactivate(product.Id)">
+                                            Desactivar
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <p>Desactivado</p>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        @if (ShowCreateModal)
+            {
+                <div id="createModal"
+                     class="modal fade show d-block"
+                     tabindex="-1"
+                     style="background-color: rgba(0,0,0,.5);">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Nuevo producto</h5>
+                                <button type="button" class="btn-close"
+                                        @onclick="CloseCreateModal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <CreateProductForm
+                                    Model="ActionProductViewModel.Product"
+                                    Categories="ActionProductViewModel.Categories"
+                                    IsBusy="IsLoading"
+                                    OnCancel="CloseCreateModal"
+                                    OnValidSubmit="CreateAsync" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (ShowEditModal)
+            {
+                <div id="editModal"
+                     class="modal fade show d-block"
+                     tabindex="-1"
+                     style="background-color: rgba(0,0,0,.5);">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Editar producto</h5>
+                                <button type="button" class="btn-close"
+                                        @onclick="CloseEditModal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <EditProductForm
+                                    Model="ActionProductViewModel.Product"
+                                    Categories="ActionProductViewModel.Categories"
+                                    IsBusy="IsLoading"
+                                    OnCancel="CloseEditModal"
+                                    OnValidSubmit="UpdateAsync" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        @if (ShowDesactivateConfirm)
+        {
+            <div id="confirmModal"
+                 class="modal fade show d-block"
+                 tabindex="-1"
+                 style="background-color: rgba(0,0,0,.5);">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title">Confirmar</h6>
+                            <button type="button" class="btn-close"
+                                    @onclick="CancelDesactivate"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-0">¿Desea desactivar el producto?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary btn-sm"
+                                    @onclick="CancelDesactivate">
+                                Cancelar
+                            </button>
+                            <button class="btn btn-danger btn-sm"
+                                    @onclick="ConfirmDesactivateAsync">
+                                Desactivar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
