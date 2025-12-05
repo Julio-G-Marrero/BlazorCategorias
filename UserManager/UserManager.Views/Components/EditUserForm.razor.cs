@@ -13,5 +13,6 @@ public partial class EditUserForm : ComponentBase
     protected override void OnParametersSet()
     {
         Model ??= new UserModel();
+        Model.NewPassword ??= string.Empty;
     }
 }

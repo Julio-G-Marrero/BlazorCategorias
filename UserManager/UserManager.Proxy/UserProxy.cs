@@ -24,20 +24,35 @@ public class UserProxy : IUserProxy
 
     public async Task<HandlerRequestResult<IEnumerable<UserDto>>> GetAllUsersAsync()
     {
-        HandlerRequestResult<IEnumerable<UserDto>> result;
-
         try
         {
             var response = await _httpClient.GetAsync(BaseRoute);
-            result = await response.Content.ReadFromJsonAsync<HandlerRequestResult<IEnumerable<UserDto>>>();
+
+            var result = await response.Content
+                .ReadFromJsonAsync<HandlerRequestResult<IEnumerable<UserDto>>>();
+
+            if (result is null)
+            {
+                return new HandlerRequestResult<IEnumerable<UserDto>>(
+                    "No se pudo obtener respuesta válida del servidor.");
+            }
+
+            return result;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError(ex, "Error occurred while fetching all users (HTTP error).");
+
+            return new HandlerRequestResult<IEnumerable<UserDto>>(
+                "No se pudo conectar con el servidor.");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while fetching all users.");
-            throw;
-        }
+            _logger.LogError(ex, "Unexpected error occurred while fetching all users.");
 
-        return result;
+            return new HandlerRequestResult<IEnumerable<UserDto>>(
+                "Ocurrió un error inesperado al cargar los usuarios.");
+        }
     }
 
     public async Task<HandlerRequestResult> CreateUserAsync(UserDto dto)

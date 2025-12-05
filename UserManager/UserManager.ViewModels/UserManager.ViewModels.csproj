@@ -11,4 +11,19 @@
     <ProjectReference Include="..\UserManager.Proxy\UserManager.Proxy.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Resources\ValidationMessages.Designer.cs">
+      <DependentUpon>ValidationMessages.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\ValidationMessages.resx">
+      <LastGenOutput>ValidationMessages.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

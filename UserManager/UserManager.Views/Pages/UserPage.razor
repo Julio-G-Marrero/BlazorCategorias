@@ -145,5 +145,17 @@
                 </div>
             </div>
         }
+
+        @if (ShowErrorAlert && !string.IsNullOrEmpty(ErrorMessage))
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error:</strong> @ErrorMessage
+                <button type="button"
+                        class="btn-close"
+                        @onclick="CloseErrorAlert"
+                        aria-label="Close">
+                </button>
+            </div>
+        }
     </div>
 </div>

@@ -16,10 +16,11 @@
     <div class="mb-3">
         <label class="form-label">Categoría</label>
         <InputSelect class="form-select" @bind-Value="Model.CategoryId">
-            <option value="">-- Seleccione una categoría --</option>
+            <option value="0" disabled>-- Seleccione una categoría --</option>
+
             @foreach (var cat in Categories)
             {
-                <option value="@cat.Id">@cat.Name</option>
+                    <option value="@cat.Id">@cat.Name</option>
             }
         </InputSelect>
         <ValidationMessage For="@(() => Model.CategoryId)" />

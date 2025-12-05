@@ -16,6 +16,7 @@ internal static class UserDtoToModelAdapter
             Surnames = dto.Surnames,
             Email = dto.Email,
             Password = dto.Password,
+            NewPassword = string.Empty,
             IsActive = dto.IsActive,
         };
     }
@@ -41,7 +42,8 @@ internal static class UserDtoToModelAdapter
             Surnames = model.Surnames,
             Email = model.Email,
             Password = model.Password,
-            IsActive = model.IsActive,
+            NewPassword = model.NewPassword,
+            IsActive = model.IsActive
         };
     }
 }

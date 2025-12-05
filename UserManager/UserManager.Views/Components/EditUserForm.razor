@@ -1,4 +1,6 @@
-﻿<EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+﻿@using Microsoft.AspNetCore.Components.Forms
+
+<EditForm Model="Model" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
 
     <div class="mb-3">
@@ -17,6 +19,13 @@
         <label class="form-label">Email</label>
         <InputText class="form-control" @bind-Value="Model.Email" />
         <ValidationMessage For="@(() => Model.Email)" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Nueva contraseña</label>
+        <InputText type="password"
+                   class="form-control"
+                   @bind-Value="Model.NewPassword" />
     </div>
 
     <div class="d-flex justify-content-end gap-2">

@@ -4,19 +4,34 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using UserManager.ViewModels.Resources;
 
 namespace UserManager.ViewModels.Models;
 
 public class UserModel
 {
     public int Id { get; set; }
-    [Required, StringLength(100)]
+
+    [Required(
+        ErrorMessageResourceType = typeof(ValidationMessages),
+        ErrorMessageResourceName = "RequiredUserName")]
     public string UserName { get; set; }
-    [Required, StringLength(100)]
+
+    [Required(
+         ErrorMessageResourceType = typeof(ValidationMessages),
+         ErrorMessageResourceName = "RequiredName")]
     public string Surnames { get; set; }
-    [Required, EmailAddress, StringLength(150)]
+
+    [Required(
+     ErrorMessageResourceType = typeof(ValidationMessages),
+     ErrorMessageResourceName = "RequiredEmail")]
     public string Email { get; set; }
-    [Required, StringLength(100)]
+
+    [Required(
+      ErrorMessageResourceType = typeof(ValidationMessages),
+      ErrorMessageResourceName = "RequiredPassword")]
     public string Password { get; set; }
+
+    public string? NewPassword { get; set; }
     public bool IsActive { get; set; }
 }

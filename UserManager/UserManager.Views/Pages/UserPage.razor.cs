@@ -19,6 +19,9 @@ public partial class UserPage : ComponentBase, IDisposable
     private bool ShowCreateModal;
     private bool ShowEditModal;
 
+    private string? ErrorMessage;
+    private bool ShowErrorAlert;
+
     protected override async Task OnInitializedAsync()
     {
         ViewModel.OnFailure += HandleFailure;
@@ -27,7 +30,6 @@ public partial class UserPage : ComponentBase, IDisposable
 
     private async Task OpenCreateModal()
     {
-        Console.WriteLine("click");
         await ActionUserViewModel.InitializeViewModel();
         ShowCreateModal = true;
         StateHasChanged();
@@ -134,6 +136,14 @@ public partial class UserPage : ComponentBase, IDisposable
     private void HandleFailure(object? sender, string errorMessage)
     {
         Logger.LogWarning("Fallo VM: {msg}", errorMessage);
+        ErrorMessage = errorMessage;
+        ShowErrorAlert = true;
+        InvokeAsync(StateHasChanged);
+    }
+    private void CloseErrorAlert()
+    {
+        ShowErrorAlert = false;
+        ErrorMessage = null;
     }
 
     public void Dispose()
